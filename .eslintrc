@@ -1,0 +1,23 @@
+{
+  "parser": "babel-eslint",
+  "env": {
+    "es6": true,
+    "node": true,
+    "browser": true
+  },
+  "rules": {
+    "no-plusplus": "off",
+    "eol-last": "off",
+    "max-len": ["error", 150, {"ignoreUrls": true}],
+    "prefer-destructuring": "off",
+    "no-use-before-define": "off",
+    "linebreak-style": "off",
+    "camelcase": "warn",
+    "no-param-reassign": "off",
+    "no-tabs": "off",
+    "arrow-parens": "off",
+    "no-confusing-arrow": "off",
+    "indent": ["error", 4, "tab"]
+  },
+  "extends":  ["airbnb/base"]
+}
