@@ -1,0 +1,54 @@
+@import "_vars"
+@import "mixins"
+
+.excel__table
+  overflow-x: auto
+  color: $color-black50
+  padding-bottom: 2px
+
+  .row
+    display: flex
+    flex-direction: row
+    min-height: 20px
+    height: 24px
+
+  .cell-start, .row-number
+    display: flex
+    justify-content: center
+    align-items: center
+    min-width: $size-table-cell
+    border: 1px solid $color-border-input
+    background-color: $color-bg-table_cell
+    border-top: none
+
+  .table-header, .data
+    display: flex
+    min-height: 20px
+    height: 24px
+
+    .column
+      display: flex
+      justify-content: center
+      align-items: center
+      background: $color-bg-table_cell
+      min-width: 40px
+      width: $size-table-cell-width
+      border: 1px solid $color-border-input
+      border: 
+        top: 0
+        left: 0
+
+  .cell
+    min-width: 40px
+    width: $size-table-cell-width
+    padding: 5px
+    color: $color-black
+    outline: none
+    border: 
+      right: 1px solid $color-black10
+      bottom: 1px solid $color-black10
+
+  .selected
+    border: none
+    outline: 2px solid $color-outline-selected
+    z-index: 2
