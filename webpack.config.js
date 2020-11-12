@@ -12,16 +12,12 @@ const filename = ext => isDev ? `bundle.${ext}` : `bundle.[hash].${ext}`;
 const jsLoaders = () => {
 	const loaders = [
 		{
-			loader: "babel-loader",
+			loader: 'babel-loader',
 			options: {
 				presets: ['@babel/preset-env']
 			}
 		},
 	];
-
-	if (isDev) {
-		loaders.push('eslint-loader');
-	}
 
 	return loaders;
 };
@@ -46,7 +42,12 @@ module.exports = {
     contentBase: path.join(__dirname, 'dist'),
     compress: true,
 		port: 9000,
-		hot: isDev
+		hot: isDev,
+		overlay: true,
+		watchContentBase: true,
+    historyApiFallback: true,
+    noInfo: false,
+    stats: 'minimal',
   },
 	plugins: [
 		new CleanWebpackPlugin(),
@@ -84,7 +85,7 @@ module.exports = {
 			},
 			{
         test: /\.m?js$/,
-        exclude: /node_modules/,
+        exclude: '/node_modules/',
 				use: jsLoaders()
       }
     ],
