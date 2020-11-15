@@ -23,52 +23,27 @@ const jsLoaders = () => {
 };
 
 module.exports = {
-	context: path.resolve(__dirname, 'src'),
-	mode: 'development',
 	entry: ['@babel/polyfill', './index.js'],
+	context: path.resolve(__dirname, 'src'),
 	output: {
-		filename: filename('js'),
 		path: path.resolve(__dirname, 'dist'),
+		filename: filename('js'),
 	},
-	resolve: {
-		extensions: ['.js'],
-		alias: {
-			'@': path.resolve(__dirname, 'src'),
-			'@core': path.resolve(__dirname, 'src/core'),
-		}
-	},
-	devtool: isDev ? 'source-map' : false,
-	devServer: {
-    contentBase: path.join(__dirname, 'dist'),
-    compress: true,
-		port: 9000,
-		hot: isDev,
-		overlay: true,
-		watchContentBase: true,
-    historyApiFallback: true,
-    noInfo: false,
-    stats: 'minimal',
-  },
-	plugins: [
-		new CleanWebpackPlugin(),
-		new HTMLWebpackPlugin({
-			template: 'index.html',
-			minify: {
-				removeComments: isProd,
-				collapseWhitespace: isProd,
-			}
-		}),
-		new CopyPlugin({
-      patterns: [
-        { from: path.resolve(__dirname, 'src/favicon.ico'), to: path.resolve(__dirname, 'dist') },
-      ],
-		}),
-		new MiniCssExtractPlugin({
-			filename: filename('css')
-		}),
-	],
 	module: {
 		rules: [
+			{
+				test: /\.(png|jpe?g|gif)$/,
+				use: [{
+					loader: 'file-loader',
+					options: {
+						name: '[path][name].[ext]',
+					},
+				}, ],
+			},
+			{
+				test: /\.(ttf|eot|woff2|woff|svg|png|jpg|gif|ico)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+				loader: 'file-loader'
+			},
       {
         test: /\.s[ac]ss$/i,
         use: [
@@ -89,5 +64,44 @@ module.exports = {
 				use: jsLoaders()
       }
     ],
-	}
+	},
+	plugins: [
+		new CleanWebpackPlugin(),
+		new HTMLWebpackPlugin({
+			template: './index.html',
+			minify: {
+				removeComments: isProd,
+				collapseWhitespace: isProd,
+			}
+		}),
+		new CopyPlugin({
+			patterns: [
+				{ from: path.resolve(__dirname, 'src/favicon.ico'), to: path.resolve(__dirname, 'dist') },
+			],
+		}),
+		new MiniCssExtractPlugin({
+			filename: filename('css')
+		}),
+	],
+	resolve: {
+		extensions: ['.js'],
+		alias: {
+			'@': path.resolve(__dirname, 'src'),
+			'@core': path.resolve(__dirname, 'src/core'),
+		}
+	},
+	devServer: {
+		publicPath: '/',
+		port: 8000,
+    contentBase: path.join(__dirname, 'src'),
+    compress: true,
+		hot: isDev,
+		host: 'localhost',
+		overlay: true,
+		watchContentBase: true,
+    historyApiFallback: true,
+    noInfo: false,
+    stats: 'minimal',
+  },
+	devtool: isDev ? 'source-map' : false,
 };
