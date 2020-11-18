@@ -20,13 +20,14 @@ export class DOMListener {
         )
       }
       this.root.on(listener, this[method]);
+      console.log(this.root);
     });
   }
 
   removeDomListeners() {
     this.listeners.forEach(listener => {
       const method = getMethodName(listener);
-      this.root.off(listener, this[method])
+      this.root.off(listener, this[method]);
     });
   }
 }

@@ -12,7 +12,11 @@ function getColumnTitle(i) {
 
 function createCol(number) {
   let column = Dom.createDomElement('div', 'column');
+  let colResize = Dom.createDomElement('div', 'col-resize');
+
+  colResize.element.setAttribute('data-resize', 'col');
   column.element.textContent = getColumnTitle(number);
+  column.append(colResize);
 
   return column;
 }
@@ -37,10 +41,14 @@ function createTableHeader(colsCount) {
 function createTableRow(colsCount, rowNum) {
   const row = Dom.createDomElement('div', 'row');
   const rowNumber = Dom.createDomElement('div', 'row-number');
+  const rowResize = Dom.createDomElement('div', 'row-resize');
   const data = Dom.createDomElement('div', 'data');
   let cell;
 
+  rowResize.element.setAttribute('data-resize', 'row');
+
   rowNumber.element.textContent = rowNum + 1;
+  rowNumber.append(rowResize);
 
   for (let i = 0; i < colsCount + 1; i++) {
     cell = Dom.createDomElement('div', 'cell');
@@ -54,7 +62,7 @@ function createTableRow(colsCount, rowNum) {
   return row;
 }
 
-export function createTable(rowsCount = 100) {
+export function createTable(rowsCount = 20) {
   const table = Dom.createDomElement('div', 'table');
   const colsCount = CODES.Z - CODES.A;
   const headerRow = createTableHeader(colsCount);
