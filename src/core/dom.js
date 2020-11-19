@@ -46,6 +46,14 @@ export class Dom {
     }
   }
 
+  getClosest(selector) {
+    return new Dom(this.element.closest(selector));
+  }
+
+  getCoordinates() {
+    return this.element.getBoundingClientRect();
+  }
+
   /**
    * function createDomElement
    * @param {string} tagName tagname of document element

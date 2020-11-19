@@ -15,6 +15,7 @@ function createCol(number) {
   let colResize = Dom.createDomElement('div', 'col-resize');
 
   colResize.element.setAttribute('data-resize', 'col');
+  colResize.element.setAttribute('data-column-resizable', 'true');
   column.element.textContent = getColumnTitle(number);
   column.append(colResize);
 
