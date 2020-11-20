@@ -22,23 +22,27 @@ export class Table extends ExcelComponent {
     if (event.target.dataset.resize) {
       const resizer = new Dom(event.target);
       const parent = resizer.getClosest('[data-column-resizable="true"]');
-      const coordinates = parent.getCoordinates(); 
-
-      document.addEventListener('mousemove', e => {
-        let delta = e.pageX - coordinates.right;
-        parent.element.style.width = (coordinates.width + delta) + 'px';
-        console.log(parent.element.style.width);
-        // parent.element.style.width = (coordinates.width + delta) + 'px';
-      })
-
+			const coordinates = parent.getCoordinates();
+			
+      document.addEventListener('mousemove', (e) => Table.onMousemove(e, parent, coordinates));
+			
     };
   }
-
-  onMousemove() {
+	
+  static onMousemove(e, parent, coordinates) {
+		let delta = e.pageX - coordinates.right;		
+		parent.element.style.width = (coordinates.width + delta) + 'px';
     // console.log('mousemove');
   }
-
-  onMouseup() {
-    // console.log('mouseup');
+	
+  onMouseup(event) {
+		if (event.target.dataset.resize) {
+			const resizer = new Dom(event.target);
+			console.log(resizer);
+			const parent = resizer.getClosest('[data-column-resizable="true"]');
+			const coordinates = parent.getCoordinates();
+			
+			document.removeEventListener('mousemove', (e) => Table.onMousemove(e, parent, coordinates));
+		}
    }
 }

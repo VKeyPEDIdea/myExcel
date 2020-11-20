@@ -15,21 +15,21 @@ function createCol(number) {
   let colResize = Dom.createDomElement('div', 'col-resize');
 
   colResize.element.setAttribute('data-resize', 'col');
-  colResize.element.setAttribute('data-column-resizable', 'true');
   column.element.textContent = getColumnTitle(number);
+	column.element.setAttribute('data-column-resizable', 'true');
   column.append(colResize);
-
+	
   return column;
 }
 
 function createTableHeader(colsCount) {
-  const header = Dom.createDomElement('div', 'row');
+	const header = Dom.createDomElement('div', 'row');
   const cellStart = Dom.createDomElement('div', 'cell-start');
   const tableHeader = Dom.createDomElement('div', 'table-header');
   let column;
-
+	
   for (let i = 0; i < colsCount + 1; i++) {
-    column = createCol(i);
+		column = createCol(i);
     tableHeader.append(column);
   }
 
