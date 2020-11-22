@@ -36,14 +36,16 @@ export class Dom {
     this.element.removeEventListener(eventType, callback);
   }
 
-  append(node) {
-    if (node instanceof Dom) node = node.element;
+  append() {
+    Object.values(arguments).forEach(node => {
+      if (node instanceof Dom) node = node.element;
 
-    if (Element.prototype.append) {
-      this.element.append(node);
-    } else {
-      this.element.appendChild(node);
-    }
+      if (Element.prototype.append) {
+        this.element.append(node);
+      } else {
+        this.element.appendChild(node);
+      }
+    });
   }
 
   getClosest(selector) {
@@ -60,6 +62,28 @@ export class Dom {
 
   findAll(selector) {
     return this.element.querySelectorAll(selector);
+  }
+
+  findElement(selector) {
+    return new Dom(this.element.querySelector(selector));
+  }
+
+  addAttributes(attr = {}) {
+    Object.keys(attr).forEach(key => {
+      this.element.setAttribute(key, attr[key]);
+    });
+  }
+
+  addClass() {
+    Object.values(arguments).forEach(className => {
+      this.element.classList.add(className);
+    });
+  }
+  
+  removeClass() {
+    Object.values(arguments).forEach(className => {
+      this.element.classList.remove(className);
+    });
   }
 
   /**

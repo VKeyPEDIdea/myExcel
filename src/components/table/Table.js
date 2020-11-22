@@ -6,6 +6,7 @@ import {
 } from "./table.template";
 import { resizeHandler } from "./table.resize";
 import { isShouldResize } from "./table.helpers";
+import { TableSelection } from "./TableSelection";
 
 export class Table extends ExcelComponent {
   constructor(root) {
@@ -21,6 +22,17 @@ export class Table extends ExcelComponent {
 
   toHTML() {
     return createTable();
+  }
+
+  prepare() {
+    this.selection = new TableSelection();
+  }
+
+  init() {
+    super.init()
+
+    const cell = this.root.findElement('[data-cell-address="A1"]');
+    this.selection.select(cell);
   }
 
   onMousedown(event) {
