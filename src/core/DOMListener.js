@@ -20,7 +20,6 @@ export class DOMListener {
         )
       }
       this.root.on(listener, this[method]);
-      console.log(this.root);
     });
   }
 
