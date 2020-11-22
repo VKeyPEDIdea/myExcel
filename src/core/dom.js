@@ -46,6 +46,35 @@ export class Dom {
     }
   }
 
+  getClosest(selector) {
+    return new Dom(this.element.closest(selector));
+  }
+
+  getCoordinates() {
+    return this.element.getBoundingClientRect();
+  }
+
+  get data() {
+    return this.element.dataset;
+  }
+
+  findAll(selector) {
+    return this.element.querySelectorAll(selector);
+  }
+
+  /**
+   * function setStyles.
+   * @param {DOMElement} el aim element to changing css styles.
+   * @param {object} styles styles to element
+   */
+  static setStyles(el, styles = {}) {
+    if (el.element) el = el.element;
+    
+    Object.keys(styles).forEach(key => {
+      el.style[key] = styles[key];
+    });
+  }
+
   /**
    * function createDomElement
    * @param {string} tagName tagname of document element

@@ -21,13 +21,46 @@
     background-color: $color-bg-table_cell
     border-top: none
 
+  .row-number
+    position: relative
+
+  .row-resize, .col-resize
+    position: absolute
+    background-color: $color-outline-selected
+    z-index: 1
+    opacity: 0
+
+    &:hover, &:focus
+      opacity: 1
+
+  .row-resize
+    height: 4px
+    right: 0
+    left: 0
+    bottom: -2px
+
+    &:hover
+      cursor: n-resize
+
+  .col-resize
+    width: 4px
+    right: -2px
+    top: 0
+    bottom: 0
+
+    &:hover, &:focus
+     cursor: e-resize
+
   .table-header, .data
     display: flex
     min-height: 20px
+
+  .table-header
     height: 24px
 
     .column
       display: flex
+      position: relative
       justify-content: center
       align-items: center
       background: $color-bg-table_cell
