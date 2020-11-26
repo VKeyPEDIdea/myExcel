@@ -2,12 +2,12 @@ import {
   Dom
 } from "../../core/dom";
 
-const CODES = {
+export const CODES = {
   A: 'A'.charCodeAt(),
   Z: 'Z'.charCodeAt(),
 }
 
-function getColumnTitle(number) {
+export function getColumnTitle(number) {
   const title = String.fromCharCode(CODES.A + number);
   return title;
 }
