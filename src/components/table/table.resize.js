@@ -6,7 +6,7 @@ export function resizeHandler(event, component) {
   const parent = resizer.getClosest('[data-resizable="true"]');
   const coordinates = parent.getCoordinates();
   const attribute = parent.data.tableX;
-  const columnCells = component.querySelectorAll(`[data-table-x="${attribute}"]`);
+  const columnCells = component.root.element.querySelectorAll(`[data-table-x="${attribute}"]`);
 
   let delta;
   let value;

@@ -86,6 +86,11 @@ export class Dom {
     });
   }
 
+  setFocus() {
+    this.element.focus();
+    return this;
+  }
+
   /**
    * function setStyles.
    * @param {DOMElement} el aim element to changing css styles.

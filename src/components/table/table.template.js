@@ -1,16 +1,6 @@
-import {
-  Dom
-} from "../../core/dom";
-
-export const CODES = {
-  A: 'A'.charCodeAt(),
-  Z: 'Z'.charCodeAt(),
-}
-
-export function getColumnTitle(number) {
-  const title = String.fromCharCode(CODES.A + number);
-  return title;
-}
+import { Dom } from "../../core/dom";
+import { CODES } from './table.helpers';
+import { getColumnTitle } from './table.helpers';
 
 function createCol(number) {
   let column = Dom.createDomElement('div', 'column');
@@ -92,7 +82,7 @@ function createTableRow(colsCount, rowNum) {
   return row;
 }
 
-export function createTable(rowsCount = 20) {
+export function createTable(rowsCount = 50) {
   const table = Dom.createDomElement('div', 'table');
   const colsCount = CODES.Z - CODES.A;
   const headerRow = createTableHeader(colsCount);

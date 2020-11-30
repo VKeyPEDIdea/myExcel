@@ -1,5 +1,4 @@
-import { CODES } from './table.template';
-import { getColumnTitle } from './table.template';
+import { getCharByNumber, getNumberByColumnTitle } from './table.helpers';
 
 export class TableSelection {
   constructor() {
@@ -14,7 +13,7 @@ export class TableSelection {
   select(el) {
     this.clear();
     this.group.push(el);
-    el.addClass(this.className);
+    el.setFocus().addClass(this.className);
   }
   
   clear() {
@@ -29,17 +28,39 @@ export class TableSelection {
     const endRow = Number(endAddress.slice(1));
     const startCol = startAddress.slice(0, 1);
     const endCol = endAddress.slice(0, 1);
-
-    // const title = getColumnTitle(1);
-    console.log(startRow, startCol, endRow, endCol);
-
+    const colList = getColTitleList(startCol, endCol);
+    let min = Math.min(startRow, endRow);
+    let max = Math.max(startRow, endRow);
+    
     this.clear();
-    for (let i = startRow; i < endRow + 1; i++) {
-      let el = tableEl.findElement(`[data-cell-address="${startCol}${i}"]`);
-      this.group.push(el);
-      el.addClass(this.className);
+    
+    for (let i = min; i < max + 1; i++) {
+      colList.forEach(column => {
+        let el = tableEl.findElement(`[data-cell-address="${column}${i}"]`);
+        this.group.push(el);
+      })
     }
 
-    console.log(startAddress, endAddress);
+    this.group.forEach(cell => {
+      cell.addClass(this.className);
+    });
   }
+}
+
+function getColTitleList(startCol, endCol) {
+  let colList = [];
+  
+  startCol = getNumberByColumnTitle(startCol);
+  endCol = getNumberByColumnTitle(endCol);
+
+  let max = Math.max(startCol, endCol);
+  let min = Math.min(startCol, endCol);
+  let colTitle;
+
+  for (let i = min; i < max + 1; i++) {
+    colTitle = getCharByNumber(i);
+    colList.push(colTitle);
+  }
+
+  return colList;
 }
