@@ -1,8 +1,11 @@
 import { ExcelComponent } from "../../core/ExcelComponent";
 
 export class Toolbar extends ExcelComponent {
-  constructor(root) {
-    super(root);
+  constructor(root, options) {
+    super(root, {
+      name: 'Toolbar',
+      ...options,
+    });
   } 
 
   static getClassName() {
