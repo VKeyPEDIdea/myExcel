@@ -7,10 +7,11 @@ import { Dom } from "../../core/dom";
 import { getNextCellSelector } from './table.helpers';
 
 export class Table extends ExcelComponent {
-  constructor(root) {
+  constructor(root, options) {
     super(root, {
       name: 'Table',
-      listeners: ['mousedown','keydown'],
+      listeners: ['mousedown', 'keydown', 'input'],
+      ...options,
     });
   }
 
@@ -31,7 +32,19 @@ export class Table extends ExcelComponent {
 
     const cell = this.root.findElement('[data-cell-address="A1"]');
     this.selection.current = cell.element;
-    this.selection.select(cell);
+    this.selectCell(cell);
+
+    this.$on('formula:input', text => {
+      this.selection.current.textContent = text;
+    });
+    this.$on('formula:EnterKeyDown', () => {
+      this.selection.current.focus();
+    });
+  }
+
+  selectCell(DomElement) {
+    this.selection.select(DomElement);
+    this.$emit('table:select', DomElement);
   }
 
   onMousedown(event) {
@@ -41,11 +54,14 @@ export class Table extends ExcelComponent {
 
     if (isShouldSelect(event)) {
       const startCell = new Dom(event.target);
+      const text = event.target.textContent.trim();
 
       this.root.element.onmouseup = (e) => {
         const endCell = new Dom(e.target);
         startCell.element === endCell.element ? this.selection.select(startCell) : this.selection.selectGroup(startCell, endCell, this.root);
       }
+
+      this.$emit('table:select', text);
       this.selection.current = startCell.element;
     }
   }
@@ -53,15 +69,20 @@ export class Table extends ExcelComponent {
   onKeydown(event) {
     const keys = ['Enter', 'Tab', 'ArrowLeft', 'ArrowRight', 'ArrowDown', 'ArrowUp'];
     const { key } = event;
-
+    
     if (keys.includes(key) && !event.shiftKey) {
       event.preventDefault();
-
+      
       const currentSelectionAddress = this.selection.current.dataset.cellAddress;
       const selector = getNextCellSelector(key, currentSelectionAddress);
       const nextCell = this.root.findElement(selector);
       this.selection.current = nextCell.element;
-      this.selection.select(nextCell);
+      this.selectCell(nextCell);
     };
+  }
+
+  onInput(event) {
+    const text = event.target.textContent.trim();
+    this.$emit('table:input', text);
   }
 }

@@ -14,6 +14,14 @@ export class Dom {
     return this;
   }
 
+  set text(text) {
+    this.element.textContent = text;
+  }
+
+  get text() {
+    return this.element.textContent;
+  }
+
   clear() {
     this.html('');
     return this;
@@ -78,12 +86,16 @@ export class Dom {
     Object.values(arguments).forEach(className => {
       this.element.classList.add(className);
     });
+
+    return this;
   }
   
   removeClass() {
     Object.values(arguments).forEach(className => {
       this.element.classList.remove(className);
     });
+
+    return this;
   }
 
   setFocus() {
