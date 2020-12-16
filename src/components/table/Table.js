@@ -5,6 +5,9 @@ import { isShouldResize, isShouldSelect } from "./table.helpers";
 import { TableSelection } from "./TableSelection";
 import { Dom } from "../../core/dom";
 import { getNextCellSelector } from './table.helpers';
+import { actionCreate } from '../redux/actionCreate';
+import { actionTypes } from "../redux/actionTypes";
+import { storage } from "../../core/utils";
 
 export class Table extends ExcelComponent {
   constructor(root, options) {
@@ -20,7 +23,8 @@ export class Table extends ExcelComponent {
   }
 
   toHTML() {
-    return createTable();
+    let state = storage('excelState')
+    return createTable(20, state.colState);
   }
 
   prepare() {
@@ -47,21 +51,29 @@ export class Table extends ExcelComponent {
     this.$emit('table:select', DomElement);
   }
 
+  async resizeColTable(event) {
+    try {
+      const data = await resizeHandler(event, this);
+      this.$dispatch(actionCreate(data, actionTypes.tableResize));
+    } catch (error) {
+      console.warn('Error', error.message);
+    }
+  }
+
   onMousedown(event) {
     if (isShouldResize(event)) {
-      resizeHandler(event, this);
+      this.resizeColTable(event);
     };
 
     if (isShouldSelect(event)) {
       const startCell = new Dom(event.target);
-      const text = event.target.textContent.trim();
 
       this.root.element.onmouseup = (e) => {
         const endCell = new Dom(e.target);
         startCell.element === endCell.element ? this.selection.select(startCell) : this.selection.selectGroup(startCell, endCell, this.root);
       }
 
-      this.$emit('table:select', text);
+      this.selectCell(startCell);
       this.selection.current = startCell.element;
     }
   }

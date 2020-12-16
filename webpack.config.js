@@ -92,7 +92,7 @@ module.exports = {
 	},
 	devServer: {
 		publicPath: '/',
-		port: 8000,
+		port: 2094,
     contentBase: path.join(__dirname, 'src'),
     compress: true,
 		hot: isDev,
