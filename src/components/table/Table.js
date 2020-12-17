@@ -24,7 +24,7 @@ export class Table extends ExcelComponent {
 
   toHTML() {
     let state = storage('excelState')
-    return createTable(20, state.colState);
+    return createTable(20, state);
   }
 
   prepare() {
@@ -51,18 +51,18 @@ export class Table extends ExcelComponent {
     this.$emit('table:select', DomElement);
   }
 
-  async resizeColTable(event) {
+  async resizeTable(event) {
     try {
       const data = await resizeHandler(event, this);
       this.$dispatch(actionCreate(data, actionTypes.tableResize));
     } catch (error) {
-      console.warn('Error', error.message);
+      console.warn('Error:', error.message);
     }
   }
 
   onMousedown(event) {
     if (isShouldResize(event)) {
-      this.resizeColTable(event);
+      this.resizeTable(event);
     };
 
     if (isShouldSelect(event)) {
