@@ -9,7 +9,7 @@ export function resizeHandler(event, component) {
     const attribute = parent.data.tableX;
     const columnCells = component.root.element.querySelectorAll(`[data-table-x="${attribute}"]`);
   
-    let delta, value, resizeType;
+    let delta, value;
   
     Dom.setStyles(resizer, {
       opacity: 1,
@@ -17,11 +17,10 @@ export function resizeHandler(event, component) {
   
     document.onmousemove = e => {
   
-      switch (data) {
+      switch(data) {
         case 'col':
           delta = e.pageX - coordinates.right;
           value = coordinates.width + delta;
-          resizeType = 'col';
           Dom.setStyles(resizer, {
             right: -delta + 'px',
           });
@@ -30,7 +29,6 @@ export function resizeHandler(event, component) {
         case 'row':
           delta = e.pageY - coordinates.bottom;
           value = coordinates.height + delta;
-          resizeType = 'row';
           Dom.setStyles(resizer, {
             bottom: -delta + 'px',
           });
@@ -46,7 +44,7 @@ export function resizeHandler(event, component) {
         opacity: null,
       })
   
-      switch (data) {
+      switch(data) {
         case 'col':
           columnCells.forEach(cell => {
             Dom.setStyles(cell, {
@@ -69,7 +67,7 @@ export function resizeHandler(event, component) {
       }
       
       resolve({
-        resizeType,
+        resizeType: data,
         id: parent.data.tableX || parent.data.tableY,
         value,
       });

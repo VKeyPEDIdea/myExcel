@@ -52,13 +52,18 @@ function createRowNumber(rowNum) {
   return rowNumber;
 }
 
-function createTableCell(number, rowNum, width = '') {
+function createTableCell(number, rowNum, width = '', dataState) {
   let cell = Dom.createDomElement('div', 'cell');
+  let cellAddress = getColumnTitle(number) + (rowNum + 1);
+
+
   cell.addAttributes({
     'contenteditable': true,
     'data-table-x': number + 1,
-    'data-cell-address': getColumnTitle(number) + (rowNum + 1),
+    'data-cell-address': cellAddress,
   });
+
+  cell.text = dataState[cellAddress] || '';
 
   if (width != '') {
     Dom.setStyles(cell, {
@@ -69,7 +74,16 @@ function createTableCell(number, rowNum, width = '') {
   return cell;
 }
 
-function createTableRow(colsCount, colState, height, rowNum) {
+function createTableRow(options = {}) {
+// function createTableRow(colsCount, colState, height, rowNum) {
+  let {
+    colsCount,
+    colState,
+    dataState,
+    height,
+    number: rowNum
+  } = options;
+
   const row = Dom.createDomElement('div', 'row');
   row.addAttributes({
     'data-resizable': true,
@@ -94,7 +108,7 @@ function createTableRow(colsCount, colState, height, rowNum) {
 
   for (let i = 0; i < colsCount + 1; i++) {
     width = colState[i + 1] ? colState[i + 1] : '';
-    cell = createTableCell(i, rowNum, width);
+    cell = createTableCell(i, rowNum, width, dataState);
     data.append(cell);
   }
 
@@ -105,17 +119,25 @@ function createTableRow(colsCount, colState, height, rowNum) {
 
 export function createTable(rowsCount = 50, state = {}) {
   const table = Dom.createDomElement('div', 'table');
-  const colState = state.colState;
-  const rowState = state.rowState;
+  const { colState, rowState, dataState } = state;
   const colsCount = CODES.Z - CODES.A;
   const headerRow = createTableHeader(colsCount, colState);
-  let row, height;
+  let options = {
+    colsCount,
+    colState,
+    dataState,
+    height: null,
+    number: null,
+  };
+  
+  let row;
 
   table.append(headerRow);
 
   for (let i = 0; i < rowsCount; i++) {
-    height = rowState[i + 1] ? rowState[i + 1] : '';
-    row = createTableRow(colsCount, colState, height, i);
+    options.height = rowState[i + 1] ? rowState[i + 1] : '';
+    options.number = i;
+    row = createTableRow(options);
     table.append(row);
   }
 

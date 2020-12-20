@@ -3,7 +3,7 @@ export function isShouldResize(event) {
 }
 
 export function isShouldSelect(event) {
-  return event.target.dataset.cellAddress;
+  return event.target.dataset.cellAddress || false;
 }
 
 export const CODES = {
