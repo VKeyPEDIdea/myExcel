@@ -14,6 +14,7 @@ export class Table extends ExcelComponent {
     super(root, {
       name: 'Table',
       listeners: ['mousedown', 'keydown', 'input'],
+      subscribe: ['dataState'],
       ...options,
     });
   }

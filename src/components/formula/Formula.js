@@ -8,6 +8,7 @@ export class Formula extends ExcelComponent {
     super(root, {
       name: 'Formula',
       listeners: ['input', 'keydown'],
+      subscribe: ['dataState'],
       ...options
     });
     this.tableSelectionAddress;
@@ -40,6 +41,10 @@ export class Formula extends ExcelComponent {
       <div data-element-formula="inputFormula" class="input" contenteditable="true" spellcheck="false"></div>
     `;
   }
+
+  // storeChanged(changes) {
+  //   console.log('changes', changes);
+  // }
 
   onInput(event) {
     const text = event.target.textContent.trim();
