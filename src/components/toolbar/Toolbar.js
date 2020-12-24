@@ -10,8 +10,7 @@ export class Toolbar extends ExcelComponent {
       ...options,
       listeners: ['mousedown'],
       subscribe: ['styleState'],
-    });
-
+		});
   } 
 
   static getClassName() {
@@ -21,12 +20,23 @@ export class Toolbar extends ExcelComponent {
   init() {
     super.init();
 
-    // Получаем выделенную ячейку и ее адрес
+    // Получаем из table выделенную ячейку и ее адрес
     this.$on('table:select', cell => {
       this.cellSelection = cell.element.dataset.cellAddress;
       console.log('Toolbar:', this.cellSelection);
-    });
-  }
+		});
+	}
+	
+	storeChanged(changes) {
+		let currentCellStyles = changes.styleState[this.cellSelection];
+		this.switchBtnState(currentCellStyles);
+	}
+
+	switchBtnState(cellStyles) {
+		Object.keys(cellStyles).forEach(key => {
+			console.log(key, cellStyles[key]);
+		});
+	}
 
   onMousedown(event) {
     if (isActionBtn(event)) {
