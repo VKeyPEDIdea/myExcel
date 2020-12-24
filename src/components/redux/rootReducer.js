@@ -25,16 +25,18 @@ export function rootReducer(state, action) {
     case actionTypes.setStyle.textAlignLeft:
       prevState = state.styleState || {};
       prevState[action.data.id] = {
+				...prevState[action.data.id],
         align: 'left',
       }
       return {
         ...state,
         styleState: prevState,
-      }
+			}
 
     case actionTypes.setStyle.textAlignCenter:
       prevState = state.styleState || {};
       prevState[action.data.id] = {
+				...prevState[action.data.id],
         align: 'center',
       }
       return {
@@ -45,16 +47,53 @@ export function rootReducer(state, action) {
     case actionTypes.setStyle.textAlignRight:
       prevState = state.styleState || {};
       prevState[action.data.id] = {
+				...prevState[action.data.id],
         align: 'right',
       }
       return {
         ...state,
         styleState: prevState,
+			}
+			
+    case actionTypes.setStyle.textBold:
+			prevState = state.styleState || {};
+      prevState[action.data.id] = {
+				...prevState[action.data.id],
+        bold: prevState[action.data.id].bold ? !(prevState[action.data.id].bold) : true,
+			}
+      return {
+        ...state,
+        styleState: prevState,
+			}
+
+    case actionTypes.setStyle.textItalic:
+			prevState = state.styleState || {};
+      prevState[action.data.id] = {
+				...prevState[action.data.id],
+        italic: prevState[action.data.id].italic ? !(prevState[action.data.id].italic) : true,
       }
-    // case actionTypes.setStyle.textBold:
-    // case actionTypes.setStyle.textItalic:
-    // case actionTypes.setStyle.textUnderline:
+      return {
+        ...state,
+        styleState: prevState,
+			}
+
+    case actionTypes.setStyle.textUnderline:
+			prevState = state.styleState || {};
+      prevState[action.data.id] = {
+				...prevState[action.data.id],
+				underline: prevState[action.data.id].underline
+					? !(prevState[action.data.id].underline)
+					: true,
+      }
+      return {
+        ...state,
+        styleState: prevState,
+			}
 
     default: return state;
   }
+}
+
+function handler(state, ) {
+
 }

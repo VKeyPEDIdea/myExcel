@@ -32,7 +32,6 @@ export class Toolbar extends ExcelComponent {
     if (isActionBtn(event)) {
       let target = getTargetBtn(event);
       let formatType = target.dataset.formatText;
-      console.log(formatType);
       
       this.$dispatch(actionCreate({
         id: this.cellSelection,

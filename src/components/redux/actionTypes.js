@@ -8,5 +8,5 @@ export const actionTypes = {
     textAlignLeft: 'textAlignLeft',
     textAlignCenter: 'textAlignCenter',
     textAlignRight: 'textAlignRight',
-  }
+  },
 };
