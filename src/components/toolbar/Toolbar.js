@@ -1,8 +1,8 @@
 import { ExcelComponent } from "../../core/ExcelComponent";
-import { storage } from "../../core/utils";
 import { actionCreate } from "../redux/actionCreate";
 import { actionTypes } from "../redux/actionTypes";
 import { getTargetBtn, isActionBtn } from "./toolbar.helpers";
+import { createToolbar } from "./toolbar.template";
 
 export class Toolbar extends ExcelComponent {
   constructor(root, options) {
@@ -104,25 +104,6 @@ export class Toolbar extends ExcelComponent {
   }
 
   toHTML() {
-    return `
-    <div class="btn" data-format-text="${actionTypes.setStyle.textAlignLeft}">  
-      <i class="material-icons">format_align_left</i>
-    </div>
-    <div class="btn" data-format-text="${actionTypes.setStyle.textAlignCenter}">  
-      <i class="material-icons">format_align_center</i>
-    </div>
-    <div class="btn" data-format-text="${actionTypes.setStyle.textAlignRight}">  
-      <i class="material-icons">format_align_right</i>
-    </div>
-    <div class="btn" data-format-text="${actionTypes.setStyle.textBold}">  
-      <i class="material-icons">format_bold</i>
-    </div>
-    <div class="btn" data-format-text="${actionTypes.setStyle.textItalic}">  
-      <i class="material-icons">format_italic</i>
-    </div>
-    <div class="btn" data-format-text="${actionTypes.setStyle.textUnderline}">  
-      <i class="material-icons">format_underline</i>
-    </div>
-    `;
+    return createToolbar();
   }
 }
