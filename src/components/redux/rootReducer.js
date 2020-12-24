@@ -22,6 +22,39 @@ export function rootReducer(state, action) {
         dataState: prevState,
       }
 
+    case actionTypes.setStyle.textAlignLeft:
+      prevState = state.styleState || {};
+      prevState[action.data.id] = {
+        align: 'left',
+      }
+      return {
+        ...state,
+        styleState: prevState,
+      }
+
+    case actionTypes.setStyle.textAlignCenter:
+      prevState = state.styleState || {};
+      prevState[action.data.id] = {
+        align: 'center',
+      }
+      return {
+        ...state,
+        styleState: prevState,
+      }
+
+    case actionTypes.setStyle.textAlignRight:
+      prevState = state.styleState || {};
+      prevState[action.data.id] = {
+        align: 'right',
+      }
+      return {
+        ...state,
+        styleState: prevState,
+      }
+    // case actionTypes.setStyle.textBold:
+    // case actionTypes.setStyle.textItalic:
+    // case actionTypes.setStyle.textUnderline:
+
     default: return state;
   }
 }
