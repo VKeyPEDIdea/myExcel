@@ -2,7 +2,9 @@ import { ExcelComponent } from "../../core/ExcelComponent";
 import { actionCreate } from "../redux/actionCreate";
 import { actionTypes } from "../redux/actionTypes";
 import { getTargetBtn, isActionBtn } from "./toolbar.helpers";
+import { switchToolState, resetBtn } from "./toolSwitcher";
 import { createToolbar } from "./toolbar.template";
+import { format } from "path";
 
 export class Toolbar extends ExcelComponent {
   constructor(root, options) {
@@ -13,7 +15,7 @@ export class Toolbar extends ExcelComponent {
       subscribe: ['styleState'],
     });
 
-    this.buttons = {};
+    this.tools = {};
     this.styleState = this.store.getState().styleState;
   } 
 
@@ -26,76 +28,49 @@ export class Toolbar extends ExcelComponent {
 
     this.$on('table:select', cell => {
       this.cellSelection = cell.element.dataset.cellAddress;
-      console.log('Toolbar:', this.cellSelection);
-      this.handleState(this.cellSelection);
+			const cellStyles = this.getStylesByCell(this.cellSelection);
+			// console.log('Toolbar:', this.cellSelection);
+      this.handleState(cellStyles);
     });
 
-    this.findButtons();
-  }
+    this.findTools();
+	}
+	
+	getStylesByCell(cellAddress) {
+		return this.styleState[cellAddress];
+	}
   
-  findButtons() {
-    Object.keys(actionTypes.setStyle).forEach(key => {
-      this.buttons[key] = this.root.element.querySelector(`[data-format-text="${key}"]`);
-    });
+  findTools() {
+    Object.values(actionTypes.setStyle).forEach(value => {
+      this.tools[value] = this.root.element.querySelector(`[data-format-text="${value}"]`);
+		});
   }
 	
 	storeChanged(changes) {
     this.styleState = changes.styleState;
+		const cellStyles = this.getStylesByCell(this.cellSelection);
     
-		this.handleState(this.cellSelection);
+		this.handleState(cellStyles);
 	}
 
-	handleState(cellAddress) {
-    const cellStyles = this.styleState[cellAddress];
-
-    if (cellStyles) {
-      Object.keys(cellStyles).forEach(key => this.switchBtnState(key, cellStyles[key]));
+	handleState(state) {
+    if (state) {
+      Object.keys(state).forEach(key => {
+				// console.log(key);
+				const toolBtn = this.tools;
+				console.log(toolBtn);
+				switchToolState(key, state[key], toolBtn);
+			});
     } else {
-      this.resetBtn();
-    }
-  }
-
-  resetBtn() {
-    for (let key in this.buttons) {
-      this.buttons[key].classList.remove('active');
-    }
-
-    this.buttons.textAlignLeft.classList.add('active');
-  }
-  
-  switchBtnState(key, value) {
-    switch (key) {
-      case 'bold':
-        if (value == undefined) this.buttons.textBold.classList.add('active');
-        
-        value
-          ? this.buttons.textBold.classList.add('active')
-          : this.buttons.textBold.classList.remove('active');            
-        break;
-      case 'italic':
-        if (value == undefined) this.buttons.textItalic.classList.add('active');
-
-        value
-          ? this.buttons.textItalic.classList.add('active')
-          : this.buttons.textItalic.classList.remove('active');
-        break;
-      case 'underline':
-        if (value == undefined) this.buttons.textUnderline.classList.add('active');
-
-        value
-          ? this.buttons.textUnderline.classList.add('active')
-          : this.buttons.textUnderline.classList.remove('active');
-        break;
-      default:
-        break;
+      resetBtn();
     }
   }
 
   onMousedown(event) {
     if (isActionBtn(event)) {
       let target = getTargetBtn(event);
-      let formatType = target.dataset.formatText;
-      
+			let formatType = target.dataset.formatText;
+			
       this.$dispatch(actionCreate({
         id: this.cellSelection,
         formatType,

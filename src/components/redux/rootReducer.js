@@ -71,7 +71,8 @@ export function rootReducer(state, action) {
       prevState[action.data.id] = {
 				...prevState[action.data.id],
         italic: prevState[action.data.id].italic ? !(prevState[action.data.id].italic) : true,
-      }
+			}
+			console.log(prevState);
       return {
         ...state,
         styleState: prevState,

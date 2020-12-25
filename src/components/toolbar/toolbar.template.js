@@ -9,18 +9,18 @@ function createBtn(config) {
 }
 
 const configBtns = [
-  {
-    iconName: 'format_align_left',
-    formatType: actionTypes.setStyle.textAlignLeft,
-  },
-  {
-    iconName: 'format_align_center',
-    formatType: actionTypes.setStyle.textAlignCenter,
-  },
-  {
-    iconName: 'format_align_right',
-    formatType: actionTypes.setStyle.textAlignRight,
-  },
+  // {
+  //   iconName: 'format_align_left',
+  //   formatType: actionTypes.setStyle.textAlignLeft,
+  // },
+  // {
+  //   iconName: 'format_align_center',
+  //   formatType: actionTypes.setStyle.textAlignCenter,
+  // },
+  // {
+  //   iconName: 'format_align_right',
+  //   formatType: actionTypes.setStyle.textAlignRight,
+  // },
   {
     iconName: 'format_bold',
     formatType: actionTypes.setStyle.textBold,
