@@ -56,11 +56,18 @@ export function rootReducer(state, action) {
 			}
 			
     case actionTypes.setStyle.textBold:
-			prevState = state.styleState || {};
-      prevState[action.data.id] = {
-				...prevState[action.data.id],
-        bold: prevState[action.data.id].bold ? !(prevState[action.data.id].bold) : true,
-			}
+      prevState = state.styleState || {};
+
+      if (prevState[action.data.id]) {
+        prevState[action.data.id] = {
+          ...prevState[action.data.id],
+          bold: prevState[action.data.id].bold ? !(prevState[action.data.id].bold) : true,
+        }
+      } else {
+        prevState[action.data.id] = {
+          bold: true,
+        }
+      }
       return {
         ...state,
         styleState: prevState,
@@ -72,7 +79,6 @@ export function rootReducer(state, action) {
 				...prevState[action.data.id],
         italic: prevState[action.data.id].italic ? !(prevState[action.data.id].italic) : true,
 			}
-			console.log(prevState);
       return {
         ...state,
         styleState: prevState,
@@ -93,8 +99,4 @@ export function rootReducer(state, action) {
 
     default: return state;
   }
-}
-
-function handler(state, ) {
-
 }

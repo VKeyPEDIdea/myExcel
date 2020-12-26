@@ -4,7 +4,6 @@ import { actionTypes } from "../redux/actionTypes";
 import { getTargetBtn, isActionBtn } from "./toolbar.helpers";
 import { switchToolState, resetBtn } from "./toolSwitcher";
 import { createToolbar } from "./toolbar.template";
-import { format } from "path";
 
 export class Toolbar extends ExcelComponent {
   constructor(root, options) {
@@ -56,13 +55,10 @@ export class Toolbar extends ExcelComponent {
 	handleState(state) {
     if (state) {
       Object.keys(state).forEach(key => {
-				// console.log(key);
-				const toolBtn = this.tools;
-				console.log(toolBtn);
-				switchToolState(key, state[key], toolBtn);
+				switchToolState(key, state[key], this.tools);
 			});
     } else {
-      resetBtn();
+      resetBtn(this.tools);
     }
   }
 
