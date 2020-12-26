@@ -1,5 +1,5 @@
 import { Dom } from "../../core/dom";
-import { CODES } from './table.helpers';
+import { CODES, stylizeCell } from './table.helpers';
 import { getColumnTitle } from './table.helpers';
 
 function createCol(number, width) {
@@ -52,10 +52,10 @@ function createRowNumber(rowNum) {
   return rowNumber;
 }
 
-function createTableCell(number, rowNum, width = '', dataState) {
+function createTableCell(number, rowNum, width = '', dataState, styleState) {
   let cell = Dom.createDomElement('div', 'cell');
   let cellAddress = getColumnTitle(number) + (rowNum + 1);
-
+  let key = styleState[cellAddress];
 
   cell.addAttributes({
     'contenteditable': true,
@@ -64,6 +64,8 @@ function createTableCell(number, rowNum, width = '', dataState) {
   });
 
   cell.text = dataState[cellAddress] || '';
+
+  if (key) stylizeCell(cell, key);
 
   if (width != '') {
     Dom.setStyles(cell, {
@@ -80,6 +82,7 @@ function createTableRow(options = {}) {
     colsCount,
     colState,
     dataState,
+    styleState,
     height,
     number: rowNum
   } = options;
@@ -108,7 +111,7 @@ function createTableRow(options = {}) {
 
   for (let i = 0; i < colsCount + 1; i++) {
     width = colState[i + 1] ? colState[i + 1] : '';
-    cell = createTableCell(i, rowNum, width, dataState);
+    cell = createTableCell(i, rowNum, width, dataState, styleState);
     data.append(cell);
   }
 
@@ -119,13 +122,14 @@ function createTableRow(options = {}) {
 
 export function createTable(rowsCount = 50, state = {}) {
   const table = Dom.createDomElement('div', 'table');
-  const { colState, rowState, dataState } = state;
+  const { colState, rowState, dataState, styleState } = state;
   const colsCount = CODES.Z - CODES.A;
   const headerRow = createTableHeader(colsCount, colState);
   let options = {
     colsCount,
     colState,
     dataState,
+    styleState,
     height: null,
     number: null,
   };

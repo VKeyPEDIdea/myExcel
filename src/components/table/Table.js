@@ -1,7 +1,7 @@
 import { ExcelComponent } from "@core/ExcelComponent";
 import { createTable } from "./table.template";
 import { resizeHandler } from "./table.resize";
-import { isShouldResize, isShouldSelect } from "./table.helpers";
+import { isShouldResize, isShouldSelect, stylizeCell } from "./table.helpers";
 import { TableSelection } from "./TableSelection";
 import { Dom } from "../../core/dom";
 import { getNextCellSelector } from './table.helpers';
@@ -52,6 +52,18 @@ export class Table extends ExcelComponent {
     this.$emit('table:select', DomElement);
   }
 
+	storeChanged(changes) {
+    this.styleState = changes.styleState;
+    this.handleState()
+  }
+
+  handleState() {
+    for (let cellAddress in this.styleState) {
+      let cell = this.root.findElement(`[data-cell-address="${cellAddress}"]`);
+      stylizeCell(cell, this.styleState[cellAddress]);
+    }
+  }
+
   async resizeTable(event) {
     try {
       const data = await resizeHandler(event, this);
@@ -80,7 +92,6 @@ export class Table extends ExcelComponent {
           case false:
             isShouldSelect(e) ? this.selection.selectGroup(startCell, endCell, this.root) : this.selection.select(startCell);
         }
-        
       }
 
       this.selectCell(startCell);
