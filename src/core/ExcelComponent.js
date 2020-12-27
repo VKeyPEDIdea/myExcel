@@ -4,7 +4,9 @@ export class ExcelComponent extends DOMListener {
   constructor(root, options = {}) {
     super(root, options.listeners);
     this.name = options.name;
+    this.store = options.store;
     this.emitter = options.emitter;
+    this.subscribe = options.subscribe || [];
     this.unsubscribers = [];
 
     this.prepare();
@@ -37,6 +39,17 @@ export class ExcelComponent extends DOMListener {
     const unsub = this.emitter.subscribe(event, func);
     this.unsubscribers.push(unsub);
   }
+
+  /**
+   * framework $dispatch function. Redux store method: changes state of component.
+   * @param {object} action Action object 
+   */
+  $dispatch(action) {
+    this.store.dispatch(action);
+  }
+
+  // Приходят только те изменения, на которые мы подписались
+  storeChanged() {}
   
   init() {
     this.initDomListeners();

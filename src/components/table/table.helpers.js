@@ -1,9 +1,49 @@
+import { Dom } from "../../core/dom";
+
 export function isShouldResize(event) {
   return event.target.dataset.resize;
 }
 
 export function isShouldSelect(event) {
-  return event.target.dataset.cellAddress;
+  return event.target.dataset.cellAddress || false;
+}
+
+export function stylizeCell(cell, key) {
+  if (key.align) {
+    Dom.setStyles(cell, {
+      'text-align': `${key.align}`,
+    });
+  }
+
+  if (key.bold == true) {
+    Dom.setStyles(cell, {
+      'font-weight': 'bold',
+    });
+  } else if (key.bold == false) {
+    Dom.setStyles(cell, {
+      'font-weight': 'normal',
+    });
+  }
+
+  if (key.underline == true) {
+    Dom.setStyles(cell, {
+      'text-decoration': 'underline',
+    });
+  } else if (key.underline == false) {
+    Dom.setStyles(cell, {
+      'text-decoration': 'none',
+    });
+  }
+
+  if (key.italic == true) {
+    Dom.setStyles(cell, {
+      'font-style': 'italic',
+    });
+  } else if (key.italic == false) {
+    Dom.setStyles(cell, {
+      'font-style': 'normal',
+    });
+  }
 }
 
 export const CODES = {

@@ -1,16 +1,24 @@
 import { Dom } from "../../core/dom";
-import { CODES } from './table.helpers';
+import { CODES, stylizeCell } from './table.helpers';
 import { getColumnTitle } from './table.helpers';
 
-function createCol(number) {
+function createCol(number, width) {
   let column = Dom.createDomElement('div', 'column');
+  let colResize = Dom.createDomElement('div', 'col-resize');
+
   column.element.textContent = getColumnTitle(number);
+
+  if (width != '') {
+    Dom.setStyles(column, {
+      'width': `${width}px`,
+    })
+  }
+
   column.addAttributes({
     'data-resizable': true,
     'data-table-x': number + 1
   });
 
-  let colResize = Dom.createDomElement('div', 'col-resize');
   colResize.addAttributes({
     'data-resize': 'col'
   });
@@ -20,14 +28,15 @@ function createCol(number) {
   return column;
 }
 
-function createTableHeader(colsCount) {
+function createTableHeader(colsCount, colState) {
   const header = Dom.createDomElement('div', 'row');
   const cellStart = Dom.createDomElement('div', 'cell-start');
   const tableHeader = Dom.createDomElement('div', 'table-header');
-  let column;
+  let column, width;
 
   for (let i = 0; i < colsCount + 1; i++) {
-    column = createCol(i);
+    width = colState[i + 1] ? colState[i + 1] : '';
+    column = createCol(i, width);
     tableHeader.append(column);
   }
 
@@ -43,37 +52,66 @@ function createRowNumber(rowNum) {
   return rowNumber;
 }
 
-function createTableCell(number, rowNum) {
+function createTableCell(number, rowNum, width = '', dataState, styleState) {
   let cell = Dom.createDomElement('div', 'cell');
+  let cellAddress = getColumnTitle(number) + (rowNum + 1);
+  let key = styleState[cellAddress];
+
   cell.addAttributes({
     'contenteditable': true,
     'data-table-x': number + 1,
-    'data-cell-address': getColumnTitle(number) + (rowNum + 1),
+    'data-cell-address': cellAddress,
   });
+
+  cell.text = dataState[cellAddress] || '';
+
+  if (key) stylizeCell(cell, key);
+
+  if (width != '') {
+    Dom.setStyles(cell, {
+      'width': `${width}px`,
+    });
+  }
 
   return cell;
 }
 
-function createTableRow(colsCount, rowNum) {
+function createTableRow(options = {}) {
+// function createTableRow(colsCount, colState, height, rowNum) {
+  let {
+    colsCount,
+    colState,
+    dataState,
+    styleState,
+    height,
+    number: rowNum
+  } = options;
+
   const row = Dom.createDomElement('div', 'row');
   row.addAttributes({
     'data-resizable': true,
+    'data-table-y': rowNum + 1,
   });
-  
+
+  Dom.setStyles(row, {
+    height: `${height}px`,
+  })
+
   const rowNumber = createRowNumber(rowNum);
   const data = Dom.createDomElement('div', 'data');
-  
+
   const rowResize = Dom.createDomElement('div', 'row-resize');
   rowResize.addAttributes({
     'data-resize': 'row'
   });
-  
+
   rowNumber.append(rowResize);
-  
-  let cell;
-  
+
+  let cell, width;
+
   for (let i = 0; i < colsCount + 1; i++) {
-    cell = createTableCell(i, rowNum);
+    width = colState[i + 1] ? colState[i + 1] : '';
+    cell = createTableCell(i, rowNum, width, dataState, styleState);
     data.append(cell);
   }
 
@@ -82,16 +120,28 @@ function createTableRow(colsCount, rowNum) {
   return row;
 }
 
-export function createTable(rowsCount = 50) {
+export function createTable(rowsCount = 50, state = {}) {
   const table = Dom.createDomElement('div', 'table');
+  const { colState, rowState, dataState, styleState } = state;
   const colsCount = CODES.Z - CODES.A;
-  const headerRow = createTableHeader(colsCount);
+  const headerRow = createTableHeader(colsCount, colState);
+  let options = {
+    colsCount,
+    colState,
+    dataState,
+    styleState,
+    height: null,
+    number: null,
+  };
+  
   let row;
 
   table.append(headerRow);
 
   for (let i = 0; i < rowsCount; i++) {
-    row = createTableRow(colsCount, i);
+    options.height = rowState[i + 1] ? rowState[i + 1] : '';
+    options.number = i;
+    row = createTableRow(options);
     table.append(row);
   }
 

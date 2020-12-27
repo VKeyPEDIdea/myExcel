@@ -1,16 +1,20 @@
 import { ExcelComponent } from "@core/ExcelComponent";
 import { createTable } from "./table.template";
 import { resizeHandler } from "./table.resize";
-import { isShouldResize, isShouldSelect } from "./table.helpers";
+import { isShouldResize, isShouldSelect, stylizeCell } from "./table.helpers";
 import { TableSelection } from "./TableSelection";
 import { Dom } from "../../core/dom";
 import { getNextCellSelector } from './table.helpers';
+import { actionCreate } from '../redux/actionCreate';
+import { actionTypes } from "../redux/actionTypes";
+import { initialState } from "../redux/initialState";
 
 export class Table extends ExcelComponent {
   constructor(root, options) {
     super(root, {
       name: 'Table',
       listeners: ['mousedown', 'keydown', 'input'],
+      subscribe: ['dataState', 'styleState'],
       ...options,
     });
   }
@@ -20,7 +24,7 @@ export class Table extends ExcelComponent {
   }
 
   toHTML() {
-    return createTable();
+    return createTable(20, initialState);
   }
 
   prepare() {
@@ -37,6 +41,7 @@ export class Table extends ExcelComponent {
     this.$on('formula:input', text => {
       this.selection.current.textContent = text;
     });
+
     this.$on('formula:EnterKeyDown', () => {
       this.selection.current.focus();
     });
@@ -47,21 +52,49 @@ export class Table extends ExcelComponent {
     this.$emit('table:select', DomElement);
   }
 
+	storeChanged(changes) {
+    this.styleState = changes.styleState;
+    this.handleState()
+  }
+
+  handleState() {
+    for (let cellAddress in this.styleState) {
+      let cell = this.root.findElement(`[data-cell-address="${cellAddress}"]`);
+      stylizeCell(cell, this.styleState[cellAddress]);
+    }
+  }
+
+  async resizeTable(event) {
+    try {
+      const data = await resizeHandler(event, this);
+      this.$dispatch(actionCreate(data, actionTypes.tableResize));
+    } catch (error) {
+      console.warn('Error:', error.message);
+    }
+  }
+
   onMousedown(event) {
     if (isShouldResize(event)) {
-      resizeHandler(event, this);
+      this.resizeTable(event);
     };
 
     if (isShouldSelect(event)) {
       const startCell = new Dom(event.target);
-      const text = event.target.textContent.trim();
-
+      
       this.root.element.onmouseup = (e) => {
         const endCell = new Dom(e.target);
-        startCell.element === endCell.element ? this.selection.select(startCell) : this.selection.selectGroup(startCell, endCell, this.root);
+        const equalElement = startCell.element === endCell.element;
+
+        switch(equalElement) {
+          case true:
+            this.selection.select(startCell);
+            break;
+          case false:
+            isShouldSelect(e) ? this.selection.selectGroup(startCell, endCell, this.root) : this.selection.select(startCell);
+        }
       }
 
-      this.$emit('table:select', text);
+      this.selectCell(startCell);
       this.selection.current = startCell.element;
     }
   }
@@ -80,9 +113,17 @@ export class Table extends ExcelComponent {
       this.selectCell(nextCell);
     };
   }
-
+  
+  updateTextInStore(text) {
+    this.$dispatch(actionCreate({
+      id: this.selection.current.dataset.cellAddress,
+      text,
+    }, actionTypes.changeText));
+  }
+  
   onInput(event) {
     const text = event.target.textContent.trim();
+    this.updateTextInStore(text);
     this.$emit('table:input', text);
   }
 }

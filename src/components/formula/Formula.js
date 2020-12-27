@@ -1,13 +1,17 @@
 import { ExcelComponent } from "@core/ExcelComponent";
 import { Dom } from '@core/dom';
+import { actionCreate } from '../redux/actionCreate';
+import { actionTypes } from '../redux/actionTypes';
 
 export class Formula extends ExcelComponent {
   constructor(root, options) {
     super(root, {
       name: 'Formula',
       listeners: ['input', 'keydown'],
+      subscribe: ['dataState'],
       ...options
     });
+    this.tableSelectionAddress;
   }
 
   static getClassName() {
@@ -17,10 +21,15 @@ export class Formula extends ExcelComponent {
   init() {
     super.init();
     const inputFormula = this.root.findElement('[data-element-formula="inputFormula"]');
-    
+    const cellSelected = '[data-cell-address="A1"]';
+
+    inputFormula.text = document.querySelector(cellSelected).textContent;
+
     this.$on('table:select', cell => {
       inputFormula.text = cell.text;
+      this.tableSelectionAddress = cell.element.dataset.cellAddress;
     });
+
     this.$on('table:input', text => {
       inputFormula.text = text;
     });
@@ -33,10 +42,18 @@ export class Formula extends ExcelComponent {
     `;
   }
 
+  // storeChanged(changes) {
+  //   console.log('changes', changes);
+  // }
+
   onInput(event) {
     const text = event.target.textContent.trim();
     
     this.$emit('formula:input', text);
+    this.$dispatch(actionCreate({
+      id: this.tableSelectionAddress,
+      text,
+    }, actionTypes.changeText));
   }
 
   onKeydown(event) {
