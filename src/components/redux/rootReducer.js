@@ -95,7 +95,16 @@ export function rootReducer(state, action) {
       return {
         ...state,
         styleState: prevState,
-			}
+      }
+      
+    case actionTypes.changeTitle:
+      prevState = state.tableTitle || {};
+      prevState = action.data;
+
+      return {
+        ...state,
+        tableTitle: prevState,
+      }
 
     default: return state;
   }

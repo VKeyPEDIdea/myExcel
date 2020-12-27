@@ -9,4 +9,5 @@ export const actionTypes = {
     textAlignCenter: 'textAlignCenter',
     textAlignRight: 'textAlignRight',
   },
+  changeTitle: 'changeTitle',
 };

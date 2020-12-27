@@ -1,9 +1,13 @@
 import { ExcelComponent } from "@core/ExcelComponent";
+import { storage } from "../../core/utils";
+import { actionCreate } from "../redux/actionCreate";
+import { actionTypes } from "../redux/actionTypes";
 
 export class Header extends ExcelComponent {
   constructor(root, options) {
     super(root, {
       name: 'Header',
+      listeners: ['input'],
       ...options,
     });
   } 
@@ -12,10 +16,13 @@ export class Header extends ExcelComponent {
     return 'excel__header';
   }
 
+  prepare() {
+    this.title = this.store.getState().tableTitle;
+  }
+
   toHTML() {
-    // console.log(this);
     return `
-      <input type="text" class="input" value="Новая таблица">
+      <input type="text" class="input" value="${this.title}">
       <div>
         <div class="btn">  
           <i class="material-icons">delete</i>
@@ -25,5 +32,10 @@ export class Header extends ExcelComponent {
         </div>
       </div>
     `;
+  }
+
+  onInput(e) {
+    const text = e.target.value;
+    this.$dispatch(actionCreate(text, actionTypes.changeTitle));
   }
 }

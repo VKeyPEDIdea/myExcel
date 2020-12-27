@@ -1,6 +1,7 @@
 import { storage } from '../../core/utils';
 
 const defaultState = {
+  tableTitle: 'Новая таблица',
   rowState: {},
   colState: {},
   dataState: {},
