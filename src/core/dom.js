@@ -1,8 +1,9 @@
+/* eslint-disable prefer-rest-params */
 export class Dom {
   constructor(selector) {
-    this.element = typeof (selector) === 'string' ?
-      document.querySelector(selector) :
-      selector;
+    this.element = typeof (selector) === 'string'
+      ? document.querySelector(selector)
+      : selector;
   }
 
   get html() {
@@ -35,6 +36,7 @@ export class Dom {
   on(eventType, callback) {
     this.element.addEventListener(eventType, callback);
   }
+
   /**
    * function on. Removes listener to some event
    * @param {string} eventType type of event for event handler
@@ -89,7 +91,7 @@ export class Dom {
 
     return this;
   }
-  
+
   removeClass() {
     Object.values(arguments).forEach(className => {
       this.element.classList.remove(className);
@@ -110,7 +112,7 @@ export class Dom {
    */
   static setStyles(el, styles = {}) {
     if (el.element) el = el.element;
-    
+
     Object.keys(styles).forEach(key => {
       el.style[key] = styles[key];
     });
@@ -124,7 +126,7 @@ export class Dom {
   static createDomElement(tagName, classes = '') {
     const element = document.createElement(tagName);
 
-    if (typeof(classes) == 'string') {
+    if (typeof (classes) === 'string') {
       element.classList.add(classes);
     }
 

@@ -7,7 +7,7 @@ export class TableSelection {
   }
 
   get className() {
-    return this._className; 
+    return this._className;
   }
 
   select(el) {
@@ -15,7 +15,7 @@ export class TableSelection {
     this.group.push(el);
     el.setFocus().addClass(this.className);
   }
-  
+
   clear() {
     this.group.forEach(cell => cell.removeClass(this.className));
     this.group = [];
@@ -29,16 +29,16 @@ export class TableSelection {
     const startCol = startAddress.slice(0, 1);
     const endCol = endAddress.slice(0, 1);
     const colList = getColTitleList(startCol, endCol);
-    let min = Math.min(startRow, endRow);
-    let max = Math.max(startRow, endRow);
-    
+    const min = Math.min(startRow, endRow);
+    const max = Math.max(startRow, endRow);
+
     this.clear();
-    
+
     for (let i = min; i < max + 1; i++) {
       colList.forEach(column => {
-        let el = tableEl.findElement(`[data-cell-address="${column}${i}"]`);
+        const el = tableEl.findElement(`[data-cell-address="${column}${i}"]`);
         this.group.push(el);
-      })
+      });
     }
 
     this.group.forEach(cell => {
@@ -48,13 +48,13 @@ export class TableSelection {
 }
 
 function getColTitleList(startCol, endCol) {
-  let colList = [];
-  
+  const colList = [];
+
   startCol = getNumberByColumnTitle(startCol);
   endCol = getNumberByColumnTitle(endCol);
 
-  let max = Math.max(startCol, endCol);
-  let min = Math.min(startCol, endCol);
+  const max = Math.max(startCol, endCol);
+  const min = Math.min(startCol, endCol);
   let colTitle;
 
   for (let i = min; i < max + 1; i++) {

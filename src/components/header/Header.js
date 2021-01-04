@@ -1,8 +1,8 @@
-import { ExcelComponent } from "@core/ExcelComponent";
-import { ActiveRoute } from "../../core/routes/ActiveRoute";
-import { actionCreate } from "../redux/actionCreate";
-import { actionTypes } from "../redux/actionTypes";
-import { getTargetBtn } from "./header.helpers";
+import { ExcelComponent } from '../../core/ExcelComponent';
+import { ActiveRoute } from '../../core/routes/ActiveRoute';
+import { actionCreate } from '../redux/actionCreate';
+import { actionTypes } from '../redux/actionTypes';
+import { getTargetBtn } from './header.helpers';
 import { createHeaderBtn } from './header.template';
 
 export class Header extends ExcelComponent {
@@ -13,7 +13,7 @@ export class Header extends ExcelComponent {
       ...options,
     });
     this.storageTableName = options.storageTableName;
-  } 
+  }
 
   static getClassName() {
     return 'excel__header';
@@ -35,18 +35,21 @@ export class Header extends ExcelComponent {
   onClick(e) {
     const target = getTargetBtn(e);
     const action = target.dataset.btnAction;
+    let decision;
 
     switch (action) {
       case 'exitToDashboard':
-        ActiveRoute.navigate('')
+        ActiveRoute.navigate('');
         break;
       case 'delete':
-        const decision = confirm(`Выдействительно хотите удалить таблицу «${this.title}»?`);
+        decision = confirm(`Вы действительно хотите удалить таблицу «${this.title}»?`);
 
         if (decision) {
           localStorage.removeItem(this.storageTableName);
           ActiveRoute.navigate('');
         }
+        break;
+      default:
         break;
     }
   }

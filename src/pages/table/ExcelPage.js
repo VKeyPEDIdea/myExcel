@@ -19,7 +19,7 @@ export class ExcelPage extends Page {
 
     this.excel = new Excel({
       components: [Header, Toolbar, Formula, Table],
-      store: store,
+      store,
       storageTableName: this.storageTableName,
     });
 
@@ -27,7 +27,7 @@ export class ExcelPage extends Page {
   }
 
   get storageTableName() {
-    return 'excel:' + this.params;
+    return `excel:${this.params}`;
   }
 
   afterRender() {

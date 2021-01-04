@@ -17,7 +17,16 @@
     "no-tabs": "off",
     "arrow-parens": "off",
     "no-confusing-arrow": "off",
-    "indent": ["error", 4, "tab"]
+    "indent": ["off"],
+    "class-methods-use-this": "off",
+    "no-restricted-globals": ["error", "event", "fdescribe"],
+    "no-alert": "off",
+    "no-new": "off",
+    "import/prefer-default-export": "off",
+    "one-var": "off",
+    "one-var-declaration-per-line": "off",
+    "no-underscore-dangle": "off",
+    "no-continue": "off"
   },
   "extends":  ["airbnb/base"]
 }

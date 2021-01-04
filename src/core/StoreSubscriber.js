@@ -1,4 +1,4 @@
-import { isEqual } from "./utils";
+import { isEqual } from './utils';
 
 export class StoreSubscriber {
   constructor(store) {
@@ -15,16 +15,15 @@ export class StoreSubscriber {
         if (!isEqual(this.prevState[key], state[key])) {
           listComponents.forEach(component => {
             if (component.subscribe.includes(key)) {
-              const changes = {[key]: state[key]};
+              const changes = { [key]: state[key] };
               component.storeChanged(changes);
             }
           });
         }
       });
-      
+
       this.prevState = this.store.getState();
     });
-
   }
 
   unsubscribeFromStore() {

@@ -1,26 +1,25 @@
-import { Dom } from "../../core/dom";
-import { CODES, stylizeCell } from './table.helpers';
-import { getColumnTitle } from './table.helpers';
+import { Dom } from '../../core/dom';
+import { CODES, stylizeCell, getColumnTitle } from './table.helpers';
 
 function createCol(number, width) {
-  let column = Dom.createDomElement('div', 'column');
-  let colResize = Dom.createDomElement('div', 'col-resize');
+  const column = Dom.createDomElement('div', 'column');
+  const colResize = Dom.createDomElement('div', 'col-resize');
 
   column.element.textContent = getColumnTitle(number);
 
-  if (width != '') {
+  if (width !== '') {
     Dom.setStyles(column, {
-      'width': `${width}px`,
-    })
+      width: `${width}px`,
+    });
   }
 
   column.addAttributes({
     'data-resizable': true,
-    'data-table-x': number + 1
+    'data-table-x': number + 1,
   });
 
   colResize.addAttributes({
-    'data-resize': 'col'
+    'data-resize': 'col',
   });
 
   column.append(colResize);
@@ -53,12 +52,12 @@ function createRowNumber(rowNum) {
 }
 
 function createTableCell(number, rowNum, width = '', dataState, styleState) {
-  let cell = Dom.createDomElement('div', 'cell');
-  let cellAddress = getColumnTitle(number) + (rowNum + 1);
-  let key = styleState[cellAddress];
+  const cell = Dom.createDomElement('div', 'cell');
+  const cellAddress = getColumnTitle(number) + (rowNum + 1);
+  const key = styleState[cellAddress];
 
   cell.addAttributes({
-    'contenteditable': true,
+    contenteditable: true,
     'data-table-x': number + 1,
     'data-cell-address': cellAddress,
   });
@@ -67,9 +66,9 @@ function createTableCell(number, rowNum, width = '', dataState, styleState) {
 
   if (key) stylizeCell(cell, key);
 
-  if (width != '') {
+  if (width !== '') {
     Dom.setStyles(cell, {
-      'width': `${width}px`,
+      width: `${width}px`,
     });
   }
 
@@ -78,13 +77,13 @@ function createTableCell(number, rowNum, width = '', dataState, styleState) {
 
 function createTableRow(options = {}) {
 // function createTableRow(colsCount, colState, height, rowNum) {
-  let {
+  const {
     colsCount,
     colState,
     dataState,
     styleState,
     height,
-    number: rowNum
+    number: rowNum,
   } = options;
 
   const row = Dom.createDomElement('div', 'row');
@@ -95,14 +94,14 @@ function createTableRow(options = {}) {
 
   Dom.setStyles(row, {
     height: `${height}px`,
-  })
+  });
 
   const rowNumber = createRowNumber(rowNum);
   const data = Dom.createDomElement('div', 'data');
 
   const rowResize = Dom.createDomElement('div', 'row-resize');
   rowResize.addAttributes({
-    'data-resize': 'row'
+    'data-resize': 'row',
   });
 
   rowNumber.append(rowResize);
@@ -122,10 +121,15 @@ function createTableRow(options = {}) {
 
 export function createTable(rowsCount = 50, state = {}) {
   const table = Dom.createDomElement('div', 'table');
-  const { colState, rowState, dataState, styleState } = state;
+  const {
+    colState,
+    rowState,
+    dataState,
+    styleState,
+  } = state;
   const colsCount = CODES.Z - CODES.A;
   const headerRow = createTableHeader(colsCount, colState);
-  let options = {
+  const options = {
     colsCount,
     colState,
     dataState,
@@ -133,7 +137,7 @@ export function createTable(rowsCount = 50, state = {}) {
     height: null,
     number: null,
   };
-  
+
   let row;
 
   table.append(headerRow);

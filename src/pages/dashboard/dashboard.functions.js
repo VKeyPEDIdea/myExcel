@@ -1,22 +1,22 @@
-import { storage } from "../../core/utils";
+import { storage } from '../../core/utils';
 
 function getListItemTemplate(key) {
   const state = storage(key);
   const dateKey = Number(key.slice(6));
   const dateCreation = new Date(dateKey);
   const formatDate = dateCreation.toLocaleDateString();
-  const formatTime = dateCreation.toLocaleTimeString().slice(0,5);
+  const formatTime = dateCreation.toLocaleTimeString().slice(0, 5);
   return `
   <div class="db__doc-list-item">
     <a href="#excel/${dateKey}" class="title">${state.tableTitle}</a>
     <div class="date">${formatTime} ${formatDate}</div>
   </div>
-  `
+  `;
 }
 
 function getExcelKeysFromLS() {
   const keys = [];
-  
+
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
     if (!key.includes('excel')) {
@@ -30,7 +30,7 @@ function getExcelKeysFromLS() {
 
 export function getTableList() {
   const keys = getExcelKeysFromLS();
-  if (keys.length == 0) return getEmptyMsg();
+  if (keys.length === 0) return getEmptyMsg();
 
   return `
   <div class="db__doc-list db__container">
@@ -43,7 +43,7 @@ export function getTableList() {
       .join('')
     }
   </div>
-  `
+  `;
 }
 
 function getEmptyMsg() {

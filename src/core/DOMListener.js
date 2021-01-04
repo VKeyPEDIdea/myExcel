@@ -1,4 +1,4 @@
-import { capitalizeFirstLetter } from "./utils";
+import { capitalizeFirstLetter } from './utils';
 
 export class DOMListener {
   constructor(root, listeners = []) {
@@ -14,10 +14,8 @@ export class DOMListener {
       const method = getMethodName(listener);
 
       if (!this[method]) {
-        const name = this.name || ''
-        throw new Error(
-          `Method ${method} is not implemented in ${name} Component`
-        )
+        const name = this.name || '';
+        throw new Error(`Method ${method} is not implemented in ${name} Component`);
       }
       this[method] = this[method].bind(this);
 
@@ -34,5 +32,5 @@ export class DOMListener {
 }
 
 function getMethodName(eventName) {
-  return 'on' + capitalizeFirstLetter(eventName);
+  return `on${capitalizeFirstLetter(eventName)}`;
 }

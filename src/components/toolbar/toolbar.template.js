@@ -1,11 +1,11 @@
-import { actionTypes } from "../redux/actionTypes";
+import { actionTypes } from '../redux/actionTypes';
 
 function createBtn(config) {
   return `
   <div class="btn" data-format-text="${config.formatType}">  
     <i class="material-icons">${config.iconName}</i>
   </div>
-  `
+  `;
 }
 
 const configBtns = [

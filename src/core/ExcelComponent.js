@@ -1,4 +1,4 @@
-import { DOMListener } from "./DOMListener";
+import { DOMListener } from './DOMListener';
 
 export class ExcelComponent extends DOMListener {
   constructor(root, options = {}) {
@@ -13,7 +13,7 @@ export class ExcelComponent extends DOMListener {
   }
 
   prepare() {
-    
+
   }
 
   // Возвращает шаблон компонента
@@ -23,8 +23,8 @@ export class ExcelComponent extends DOMListener {
 
   /**
    * framework $emit function. Notify listeners about event
-   * @param {object} event 
-   * @param  {...any} args 
+   * @param {object} event
+   * @param  {...any} args
    */
   $emit(event, ...args) {
     this.emitter.emit(event, ...args);
@@ -42,7 +42,7 @@ export class ExcelComponent extends DOMListener {
 
   /**
    * framework $dispatch function. Redux store method: changes state of component.
-   * @param {object} action Action object 
+   * @param {object} action Action object
    */
   $dispatch(action) {
     this.store.dispatch(action);
@@ -50,7 +50,7 @@ export class ExcelComponent extends DOMListener {
 
   // Приходят только те изменения, на которые мы подписались
   storeChanged() {}
-  
+
   init() {
     this.initDomListeners();
   }

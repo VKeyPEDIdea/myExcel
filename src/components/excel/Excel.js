@@ -1,6 +1,6 @@
-import { Dom } from "../../core/dom";
-import { Emitter } from "../../core/Observer";
-import { StoreSubscriber } from "../../core/StoreSubscriber";
+import { Dom } from '../../core/dom';
+import { Emitter } from '../../core/Observer';
+import { StoreSubscriber } from '../../core/StoreSubscriber';
 
 export class Excel {
   constructor(options) {
@@ -18,14 +18,14 @@ export class Excel {
       emitter: this.emitter,
       store: this.store,
       storageTableName: this.storageTableName,
-    }
+    };
 
     this.components = this.components.map(Component => {
       const element = Dom.createDomElement('div', Component.getClassName());
-      
+
       const component = new Component(element, componentOptions);
       element.html = component.toHTML();
-      
+
       root.append(element);
 
       return component;

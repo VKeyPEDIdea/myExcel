@@ -1,10 +1,10 @@
 export class Emitter {
   constructor() {
-    this.listeners = {}
+    this.listeners = {};
   }
 
   /**
-   * method emit. Notifies listeners if they are. 
+   * method emit. Notifies listeners if they are.
    * @param {string} eventName Title of event
    */
   emit(eventName, ...args) {
@@ -30,6 +30,6 @@ export class Emitter {
 
     return () => {
       this.listeners[eventName] = this.listeners[eventName].filter(listener => listener !== func);
-    }
+    };
   }
 }
