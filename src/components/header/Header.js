@@ -1,15 +1,18 @@
 import { ExcelComponent } from "@core/ExcelComponent";
-import { storage } from "../../core/utils";
+import { ActiveRoute } from "../../core/routes/ActiveRoute";
 import { actionCreate } from "../redux/actionCreate";
 import { actionTypes } from "../redux/actionTypes";
+import { getTargetBtn } from "./header.helpers";
+import { createHeaderBtn } from './header.template';
 
 export class Header extends ExcelComponent {
   constructor(root, options) {
     super(root, {
       name: 'Header',
-      listeners: ['input'],
+      listeners: ['input', 'click'],
       ...options,
     });
+    this.storageTableName = options.storageTableName;
   } 
 
   static getClassName() {
@@ -24,14 +27,28 @@ export class Header extends ExcelComponent {
     return `
       <input type="text" class="input" value="${this.title}">
       <div>
-        <div class="btn">  
-          <i class="material-icons">delete</i>
-        </div>
-        <div class="btn">
-          <i class="material-icons">exit_to_app</i>
-        </div>
+        ${createHeaderBtn()}
       </div>
     `;
+  }
+
+  onClick(e) {
+    const target = getTargetBtn(e);
+    const action = target.dataset.btnAction;
+
+    switch (action) {
+      case 'exitToDashboard':
+        ActiveRoute.navigate('')
+        break;
+      case 'delete':
+        const decision = confirm(`Выдействительно хотите удалить таблицу «${this.title}»?`);
+
+        if (decision) {
+          localStorage.removeItem(this.storageTableName);
+          ActiveRoute.navigate('');
+        }
+        break;
+    }
   }
 
   onInput(e) {
