@@ -3,12 +3,12 @@ import { Emitter } from "../../core/Observer";
 import { StoreSubscriber } from "../../core/StoreSubscriber";
 
 export class Excel {
-  constructor(selector, options) {
-    this.element = new Dom(selector);
+  constructor(options) {
     this.components = options.components || [];
     this.store = options.store;
     this.emitter = new Emitter();
     this.subscriber = new StoreSubscriber(this.store);
+    this.storageTableName = options.storageTableName;
   }
 
   getRoot() {
@@ -17,6 +17,7 @@ export class Excel {
     const componentOptions = {
       emitter: this.emitter,
       store: this.store,
+      storageTableName: this.storageTableName,
     }
 
     this.components = this.components.map(Component => {
@@ -33,9 +34,7 @@ export class Excel {
     return root;
   }
 
-  render() {
-    let node = this.getRoot();
-    this.element.append(node);
+  init() {
     this.subscriber.subscribeComponents(this.components);
     this.components.forEach(component => component.init());
   }

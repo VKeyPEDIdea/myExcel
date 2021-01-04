@@ -8,4 +8,6 @@ const defaultState = {
   styleState: {}
 }
 
-export const initialState = storage('excelState') ? storage('excelState') : defaultState;
+export function initialState(key) {
+  return storage(key) ? storage(key) : defaultState;
+};

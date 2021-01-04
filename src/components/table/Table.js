@@ -17,6 +17,8 @@ export class Table extends ExcelComponent {
       subscribe: ['dataState', 'styleState'],
       ...options,
     });
+
+    this.storageTableName = options.storageTableName;
   }
 
   static getClassName() {
@@ -24,7 +26,7 @@ export class Table extends ExcelComponent {
   }
 
   toHTML() {
-    return createTable(20, initialState);
+    return createTable(20, initialState(this.storageTableName));
   }
 
   prepare() {
