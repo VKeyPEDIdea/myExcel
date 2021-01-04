@@ -3,7 +3,7 @@ export function isActionBtn(event) {
     return true;
   }
 
-  return false;;
+  return false;
 }
 
 export function getTargetBtn(event) {

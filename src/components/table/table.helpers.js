@@ -1,4 +1,4 @@
-import { Dom } from "../../core/dom";
+import { Dom } from '../../core/dom';
 
 export function isShouldResize(event) {
   return event.target.dataset.resize;
@@ -15,31 +15,31 @@ export function stylizeCell(cell, key) {
     });
   }
 
-  if (key.bold == true) {
+  if (key.bold === true) {
     Dom.setStyles(cell, {
       'font-weight': 'bold',
     });
-  } else if (key.bold == false) {
+  } else if (key.bold === false) {
     Dom.setStyles(cell, {
       'font-weight': 'normal',
     });
   }
 
-  if (key.underline == true) {
+  if (key.underline === true) {
     Dom.setStyles(cell, {
       'text-decoration': 'underline',
     });
-  } else if (key.underline == false) {
+  } else if (key.underline === false) {
     Dom.setStyles(cell, {
       'text-decoration': 'none',
     });
   }
 
-  if (key.italic == true) {
+  if (key.italic === true) {
     Dom.setStyles(cell, {
       'font-style': 'italic',
     });
-  } else if (key.italic == false) {
+  } else if (key.italic === false) {
     Dom.setStyles(cell, {
       'font-style': 'normal',
     });
@@ -49,7 +49,7 @@ export function stylizeCell(cell, key) {
 export const CODES = {
   A: 'A'.charCodeAt(),
   Z: 'Z'.charCodeAt(),
-}
+};
 
 export function getCharByNumber(number) {
   return String.fromCharCode(number);
@@ -71,8 +71,8 @@ export function getNextCellSelector(key, address) {
   let row = address.slice(1);
   let col = getNumberByColumnTitle(address.slice(0, 1));
 
-  switch(key) {
-    case 'Enter': 
+  switch (key) {
+    case 'Enter':
     case 'ArrowDown':
       row++;
       break;
@@ -81,10 +81,12 @@ export function getNextCellSelector(key, address) {
       col++;
       break;
     case 'ArrowUp':
-      row = (row == MIN_VALUE_ROW) ? MIN_VALUE_ROW : row - 1;
+      row = (row === MIN_VALUE_ROW) ? MIN_VALUE_ROW : row - 1;
       break;
     case 'ArrowLeft':
-      col = (col == MIN_VALUE_COL) ? MIN_VALUE_COL : col - 1;
+      col = (col === MIN_VALUE_COL) ? MIN_VALUE_COL : col - 1;
+      break;
+    default:
       break;
   }
 

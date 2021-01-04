@@ -7,11 +7,7 @@ export class Page {
     throw new Error('Method "getRoot" should be emplemented');
   }
 
-  afterRender() {
-    
-  }
+  afterRender() {}
 
-  destroy() {
-
-  }
+  destroy() {}
 }

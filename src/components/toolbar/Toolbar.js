@@ -1,9 +1,9 @@
-import { ExcelComponent } from "../../core/ExcelComponent";
-import { actionCreate } from "../redux/actionCreate";
-import { actionTypes } from "../redux/actionTypes";
-import { getTargetBtn, isActionBtn } from "./toolbar.helpers";
-import { switchToolState, resetBtn } from "./toolSwitcher";
-import { createToolbar } from "./toolbar.template";
+import { ExcelComponent } from '../../core/ExcelComponent';
+import { actionCreate } from '../redux/actionCreate';
+import { actionTypes } from '../redux/actionTypes';
+import { getTargetBtn, isActionBtn } from './toolbar.helpers';
+import { switchToolState, resetBtn } from './toolSwitcher';
+import { createToolbar } from './toolbar.template';
 
 export class Toolbar extends ExcelComponent {
   constructor(root, options) {
@@ -16,7 +16,7 @@ export class Toolbar extends ExcelComponent {
 
     this.tools = {};
     this.styleState = this.store.getState().styleState;
-  } 
+  }
 
   static getClassName() {
     return 'excel__toolbar';
@@ -34,21 +34,21 @@ export class Toolbar extends ExcelComponent {
 
     this.findTools();
 	}
-	
+
 	getStylesByCell(cellAddress) {
 		return this.styleState[cellAddress];
 	}
-  
+
   findTools() {
     Object.values(actionTypes.setStyle).forEach(value => {
       this.tools[value] = this.root.element.querySelector(`[data-format-text="${value}"]`);
 		});
   }
-	
+
 	storeChanged(changes) {
     this.styleState = changes.styleState;
 		const cellStyles = this.getStylesByCell(this.cellSelection);
-    
+
 		this.handleState(cellStyles);
 	}
 
@@ -64,13 +64,13 @@ export class Toolbar extends ExcelComponent {
 
   onMousedown(event) {
     if (isActionBtn(event)) {
-      let target = getTargetBtn(event);
-			let formatType = target.dataset.formatText;
-			
+      const target = getTargetBtn(event);
+			const formatType = target.dataset.formatText;
+
       this.$dispatch(actionCreate({
         id: this.cellSelection,
         formatType,
-      }, actionTypes.setStyle[formatType]))
+      }, actionTypes.setStyle[formatType]));
     }
   }
 

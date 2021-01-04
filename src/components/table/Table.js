@@ -1,13 +1,17 @@
-import { ExcelComponent } from "@core/ExcelComponent";
-import { createTable } from "./table.template";
-import { resizeHandler } from "./table.resize";
-import { isShouldResize, isShouldSelect, stylizeCell } from "./table.helpers";
-import { TableSelection } from "./TableSelection";
-import { Dom } from "../../core/dom";
-import { getNextCellSelector } from './table.helpers';
+import { ExcelComponent } from '../../core/ExcelComponent';
+import { createTable } from './table.template';
+import { resizeHandler } from './table.resize';
+import {
+  isShouldResize,
+  isShouldSelect,
+  stylizeCell,
+  getNextCellSelector,
+} from './table.helpers';
+import { TableSelection } from './TableSelection';
+import { Dom } from '../../core/dom';
 import { actionCreate } from '../redux/actionCreate';
-import { actionTypes } from "../redux/actionTypes";
-import { initialState } from "../redux/initialState";
+import { actionTypes } from '../redux/actionTypes';
+import { initialState } from '../redux/initialState';
 
 export class Table extends ExcelComponent {
   constructor(root, options) {
@@ -34,7 +38,7 @@ export class Table extends ExcelComponent {
   }
 
   init() {
-    super.init()
+    super.init();
 
     const cell = this.root.findElement('[data-cell-address="A1"]');
     this.selection.current = cell.element;
@@ -56,13 +60,17 @@ export class Table extends ExcelComponent {
 
 	storeChanged(changes) {
     this.styleState = changes.styleState;
-    this.handleState()
+    this.handleState();
   }
 
   handleState() {
-    for (let cellAddress in this.styleState) {
-      let cell = this.root.findElement(`[data-cell-address="${cellAddress}"]`);
-      stylizeCell(cell, this.styleState[cellAddress]);
+    if (this.styleState !== undefined) {
+      const state = Object.keys(this.styleState);
+
+      state.forEach(cellAddress => {
+        const cell = this.root.findElement(`[data-cell-address="${cellAddress}"]`);
+        stylizeCell(cell, this.styleState[cellAddress]);
+      });
     }
   }
 
@@ -71,30 +79,37 @@ export class Table extends ExcelComponent {
       const data = await resizeHandler(event, this);
       this.$dispatch(actionCreate(data, actionTypes.tableResize));
     } catch (error) {
-      console.warn('Error:', error.message);
+      throw new Error(error.message);
     }
   }
 
   onMousedown(event) {
     if (isShouldResize(event)) {
       this.resizeTable(event);
-    };
+    }
 
     if (isShouldSelect(event)) {
       const startCell = new Dom(event.target);
-      
+
       this.root.element.onmouseup = (e) => {
         const endCell = new Dom(e.target);
         const equalElement = startCell.element === endCell.element;
 
-        switch(equalElement) {
+        switch (equalElement) {
           case true:
             this.selection.select(startCell);
             break;
           case false:
-            isShouldSelect(e) ? this.selection.selectGroup(startCell, endCell, this.root) : this.selection.select(startCell);
+            if (isShouldSelect(e)) {
+              this.selection.selectGroup(startCell, endCell, this.root);
+            } else {
+              this.selection.select(startCell);
+            }
+            break;
+          default:
+            break;
         }
-      }
+      };
 
       this.selectCell(startCell);
       this.selection.current = startCell.element;
@@ -104,25 +119,25 @@ export class Table extends ExcelComponent {
   onKeydown(event) {
     const keys = ['Enter', 'Tab', 'ArrowLeft', 'ArrowRight', 'ArrowDown', 'ArrowUp'];
     const { key } = event;
-    
+
     if (keys.includes(key) && !event.shiftKey) {
       event.preventDefault();
-      
+
       const currentSelectionAddress = this.selection.current.dataset.cellAddress;
       const selector = getNextCellSelector(key, currentSelectionAddress);
       const nextCell = this.root.findElement(selector);
       this.selection.current = nextCell.element;
       this.selectCell(nextCell);
-    };
+    }
   }
-  
+
   updateTextInStore(text) {
     this.$dispatch(actionCreate({
       id: this.selection.current.dataset.cellAddress,
       text,
     }, actionTypes.changeText));
   }
-  
+
   onInput(event) {
     const text = event.target.textContent.trim();
     this.updateTextInStore(text);

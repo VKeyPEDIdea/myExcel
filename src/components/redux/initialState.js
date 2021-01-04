@@ -5,9 +5,9 @@ const defaultState = {
   rowState: {},
   colState: {},
   dataState: {},
-  styleState: {}
-}
+  styleState: {},
+};
 
 export function initialState(key) {
   return storage(key) ? storage(key) : defaultState;
-};
+}

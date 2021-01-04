@@ -1,5 +1,4 @@
-import { ExcelComponent } from "@core/ExcelComponent";
-import { Dom } from '@core/dom';
+import { ExcelComponent } from '../../core/ExcelComponent';
 import { actionCreate } from '../redux/actionCreate';
 import { actionTypes } from '../redux/actionTypes';
 
@@ -9,9 +8,9 @@ export class Formula extends ExcelComponent {
       name: 'Formula',
       listeners: ['input', 'keydown'],
       subscribe: ['dataState'],
-      ...options
+      ...options,
     });
-    this.tableSelectionAddress;
+    this.tableSelectionAddress = null;
   }
 
   static getClassName() {
@@ -48,7 +47,7 @@ export class Formula extends ExcelComponent {
 
   onInput(event) {
     const text = event.target.textContent.trim();
-    
+
     this.$emit('formula:input', text);
     this.$dispatch(actionCreate({
       id: this.tableSelectionAddress,
@@ -59,7 +58,7 @@ export class Formula extends ExcelComponent {
   onKeydown(event) {
     const { key } = event;
 
-    if (key == 'Enter') {
+    if (key === 'Enter') {
       event.preventDefault();
       this.$emit('formula:EnterKeyDown');
     }
