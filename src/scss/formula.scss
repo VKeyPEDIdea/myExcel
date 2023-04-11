@@ -1,0 +1,25 @@
+@import "vars";
+@import "mixins";
+
+.excel__formula {
+    display: flex;
+    border-bottom: 1px solid $color-border-input;
+
+    .icon {
+        font-size: 18px;
+        line-height: 20px;
+        font-style: italic;
+        text-align: center;
+        border-right: 1px solid $color-border-input;
+        padding: 8px 16px;
+        color: $color-black50;
+    }
+
+    .input {
+        padding: 8px;
+        font-size: 16px;
+        line-height: 20px;
+        outline: none;
+        height: 100%;
+    }
+}
